@@ -1,0 +1,70 @@
+/* ----- PALETA DE COLORES ----- */
+:root {
+    --fondo: #F2F2F2;
+    --primario: #8C8958;
+    --secundario: #59573B;
+    --destacado: #D9BC9A;
+    --texto: #0D0D0D;
+}
+
+/* ----- BASE ----- */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--fondo);
+    color: var(--texto);
+    margin: 0;
+    padding: 0;
+}
+
+/* ----- HEADER ----- */
+header {
+    background-color: var(--secundario);
+    padding: 25px;
+    text-align: center;
+    color: white;
+    border-bottom: 5px solid var(--primario);
+}
+
+/* ----- NAV ----- */
+nav a {
+    margin: 0 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: var(--destacado);
+}
+
+/* ----- CONTENIDO ----- */
+.contenido {
+    padding: 40px;
+}
+
+/* ----- TARJETAS DE PROYECTO ----- */
+.project-card {
+    background: var(--destacado);
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    color: var(--texto);
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+    border-left: 6px solid var(--primario);
+    transition: 0.3s;
+}
+
+.project-card:hover {
+    background: var(--primario);
+    color: white;
+    border-left: 6px solid var(--secundario);
+}
+
+/* ----- FOOTER ----- */
+footer {
+    text-align: center;
+    padding: 12px;
+    background-color: var(--secundario);
+    color: white;
+    border-top: 5px solid var(--primario);
+}
