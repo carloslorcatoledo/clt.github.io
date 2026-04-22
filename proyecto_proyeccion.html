@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Proyección de Cierre de Campañas — Carlos Lorca Toledo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #0f1117;
+      --surface:  #181c27;
+      --card:     #1e2336;
+      --border:   #2a3050;
+      --accent:   #4f8ef7;
+      --accent2:  #34d399;
+      --warn:     #fbbf24;
+      --text:     #e2e8f0;
+      --muted:    #7c8db5;
+      --mono:     'Space Mono', monospace;
+      --sans:     'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,17,23,0.92);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    nav .logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--text); }
+    nav .nav-links { display: flex; gap: 32px; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 48px 60px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+    .breadcrumb span { color: var(--accent); }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+    .tag-py    { color: #60a5fa; border-color: #60a5fa44; background: #60a5fa11; }
+    .tag-ml    { color: #a78bfa; border-color: #a78bfa44; background: #a78bfa11; }
+    .tag-auto  { color: var(--accent2); border-color: #34d39944; background: #34d39911; }
+    .tag-report{ color: var(--warn); border-color: #fbbf2444; background: #fbbf2411; }
+
+    h1 {
+      font-family: var(--sans);
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 600;
+      line-height: 1.2;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 640px;
+      margin-bottom: 36px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .meta-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 70%);
+      margin: 0 48px;
+      opacity: .3;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .full-col { grid-column: 1 / -1; }
+
+    h2 {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ── PANEL CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    /* ── METODOS ── */
+    .methods {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .method {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .method-num {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      min-width: 32px;
+    }
+    .method-body strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .method-body p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .method-body .highlight {
+      color: var(--accent2);
+      font-weight: 500;
+    }
+
+    /* ── PESO VISUAL ── */
+    .weight-vis {
+      margin-top: 24px;
+    }
+    .weight-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .weight-group { margin-bottom: 18px; }
+    .weight-title {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .bar-row {
+      display: flex;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--border);
+    }
+    .bar-ritmo  { background: var(--accent); }
+    .bar-prev   { background: var(--warn); }
+    .bar-prophet{ background: #a78bfa; }
+    .bar-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── STACK ── */
+    .stack-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .stack-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .stack-icon {
+      font-size: 20px;
+      width: 36px;
+      text-align: center;
+    }
+    .stack-text strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .stack-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── EMAIL MOCKUP ── */
+    .email-mockup {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,.6);
+      font-family: Calibri, sans-serif;
+      color: #222;
+      font-size: 13px;
+    }
+    .email-chrome {
+      background: #f3f4f6;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .dot-r { width:10px;height:10px;border-radius:50%;background:#ef4444; }
+    .dot-y { width:10px;height:10px;border-radius:50%;background:#f59e0b; }
+    .dot-g { width:10px;height:10px;border-radius:50%;background:#10b981; }
+    .email-chrome span {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-left: 8px;
+    }
+    .email-body { padding: 20px 24px; }
+    .email-h2 {
+      color: #2563eb;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .email-meta {
+      color: #6b7280;
+      font-size: 11px;
+      margin-bottom: 16px;
+    }
+    .email-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+    .email-table .camp-head td {
+      background: #2563eb;
+      color: white;
+      padding: 6px 12px;
+      font-weight: bold;
+      font-size: 13px;
+      border-radius: 4px 4px 0 0;
+    }
+    .email-table th {
+      background: #1e293b;
+      color: #fff;
+      padding: 6px 10px;
+      text-align: center;
+      font-size: 11px;
+    }
+    .email-table th.lbl { text-align: left; }
+    .email-table td {
+      padding: 5px 10px;
+      border: 1px solid #e5e7eb;
+      text-align: right;
+    }
+    .email-table td.lbl {
+      text-align: left;
+      background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+      width: 160px;
+    }
+    .email-table tr.proy td { background: #fffbeb; font-weight: bold; }
+    .email-section-title {
+      color: #1a3a5c;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 16px 0 8px;
+      border-top: 2px solid #e5e7eb;
+      padding-top: 12px;
+    }
+    .email-footer {
+      font-size: 10px;
+      color: #9ca3af;
+      border-top: 1px solid #f3f4f6;
+      padding-top: 8px;
+      margin-top: 10px;
+    }
+    .camp-head-week td {
+      background: #1a3a5c !important;
+    }
+
+    /* ── FLUJO ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      width: 110px;
+    }
+    .flow-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .flow-step p {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .flow-arrow {
+      color: var(--border);
+      font-size: 18px;
+      padding: 0 4px;
+      margin-bottom: 20px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 680px) {
+      .content { grid-template-columns: 1fr; padding: 40px 24px; }
+      .hero { padding: 48px 24px 40px; }
+      nav  { padding: 14px 24px; }
+      .nav-links { gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">CLT · Portfolio</div>
+  <div class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="proyectos.html">Proyectos</a>
+    <a href="sobre-mi.html">Sobre mí</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="breadcrumb">PROYECTOS / <span>PROYECCIÓN DE CAMPAÑAS</span></div>
+
+  <div class="tag-row">
+    <span class="tag tag-py">Python</span>
+    <span class="tag tag-ml">Prophet · ML</span>
+    <span class="tag tag-auto">Automatización</span>
+    <span class="tag tag-report">Reporting</span>
+  </div>
+
+  <h1>Proyección de Cierre de<br/><em>Campañas Comerciales</em></h1>
+  <p class="subtitle">
+    Sistema automático que estima el cierre mensual y semanal de métricas
+    comerciales usando tres modelos combinados, con ponderación adaptativa
+    según el avance del período. Los resultados se entregan en un correo
+    HTML ejecutivo, generado sin intervención manual.
+  </p>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Tipo</span>
+      <span class="meta-value">Analytics · Forecasting</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Stack</span>
+      <span class="meta-value">Python · Prophet · pandas · smtplib</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Input</span>
+      <span class="meta-value">Excel diario (bitácora de operaciones)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Output</span>
+      <span class="meta-value">Correo HTML automático</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTENT GRID -->
+<div class="content">
+
+  <!-- FLUJO -->
+  <div class="full-col card">
+    <h2>Flujo del sistema</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">📋</div>
+        <p>Bitácora<br/>Excel diaria</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🐼</div>
+        <p>Carga y<br/>limpieza pandas</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🧮</div>
+        <p>3 métodos<br/>de proyección</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">⚖️</div>
+        <p>Ponderación<br/>adaptativa</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">📧</div>
+        <p>Correo HTML<br/>ejecutivo</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTODOS -->
+  <div class="card">
+    <h2>Los tres métodos</h2>
+    <div class="methods">
+      <div class="method">
+        <div class="method-num">01</div>
+        <div class="method-body">
+          <strong>Ritmo del mes actual</strong>
+          <p>Promedio diario real del mes en curso, extrapolado a los días hábiles del mes. Método más directo; gana peso conforme avanza el período.</p>
+        </div>
+      </div>
+      <div class="method">
+        <div class="method-num">02</div>
+        <div class="method-body">
+          <strong>Referencia al mes anterior</strong>
+          <p>Usa el promedio del período previo para <span class="highlight">estabilizar</span> la proyección en los primeros días, cuando los datos actuales aún son escasos.</p>
+        </div>
+      </div>
+      <div class="method">
+        <div class="method-num">03</div>
+        <div class="method-body">
+          <strong>Prophet estacional (Meta)</strong>
+          <p>Aprende patrones anuales del histórico completo. <span class="highlight">Peso = 0</span> al superar el 70% del mes. Cap: no puede exceder 1.25× el ritmo real.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESOS VISUALES -->
+  <div class="card">
+    <h2>Ponderación adaptativa</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">
+      Los pesos cambian automáticamente según el avance del mes. A más datos reales, menos relevancia tienen los modelos externos.
+    </p>
+
+    <div class="weight-group">
+      <div class="weight-title">
+        <span>Inicio de mes (10% avance)</span>
+      </div>
+      <div class="bar-row">
+        <div class="bar-ritmo"  style="width:15%"></div>
+        <div class="bar-prev"   style="width:70%"></div>
+        <div class="bar-prophet"style="width:15%"></div>
+      </div>
+    </div>
+
+    <div class="weight-group">
+      <div class="weight-title">
+        <span>Mitad de mes (50% avance)</span>
+      </div>
+      <div class="bar-row">
+        <div class="bar-ritmo"  style="width:60%"></div>
+        <div class="bar-prev"   style="width:30%"></div>
+        <div class="bar-prophet"style="width:10%"></div>
+      </div>
+    </div>
+
+    <div class="weight-group">
+      <div class="weight-title">
+        <span>Fin de mes (85% avance)</span>
+      </div>
+      <div class="bar-row">
+        <div class="bar-ritmo"  style="width:90%"></div>
+        <div class="bar-prev"   style="width:10%"></div>
+        <div class="bar-prophet"style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="bar-legend">
+      <div class="legend-item"><div class="dot" style="background:var(--accent)"></div> Ritmo actual</div>
+      <div class="legend-item"><div class="dot" style="background:var(--warn)"></div> Mes anterior</div>
+      <div class="legend-item"><div class="dot" style="background:#a78bfa"></div> Prophet</div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div class="card">
+    <h2>Stack técnico</h2>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <div class="stack-icon">🐍</div>
+        <div class="stack-text">
+          <strong>Python 3.x</strong>
+          <span>Orquestación completa del flujo</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🔮</div>
+        <div class="stack-text">
+          <strong>Prophet (Meta)</strong>
+          <span>Modelo estacional multiplicativo</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🐼</div>
+        <div class="stack-text">
+          <strong>pandas · NumPy</strong>
+          <span>Carga, transformación y agregación</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">📬</div>
+        <div class="stack-text">
+          <strong>smtplib · MIMEText</strong>
+          <span>Envío de correo HTML ejecutivo vía SMTP</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">📊</div>
+        <div class="stack-text">
+          <strong>openpyxl</strong>
+          <span>Lectura de bitácora Excel con detección dinámica de columnas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOCKUP CORREO -->
+  <div class="full-col">
+    <h2 style="margin-bottom:24px;">Vista del correo generado (datos de ejemplo)</h2>
+    <div class="email-mockup">
+      <div class="email-chrome">
+        <div class="dot-r"></div>
+        <div class="dot-y"></div>
+        <div class="dot-g"></div>
+        <span>Proyección Cierre Campañas — 2026-04 &nbsp;·&nbsp; Reporting Automático</span>
+      </div>
+      <div class="email-body">
+        <div class="email-h2">Proyección de Cierre Mensual — Campañas Comerciales</div>
+        <div class="email-meta">
+          <b>Mes en curso:</b> 2026-04 &nbsp;|&nbsp;
+          <b>Avance:</b> 72.5% (15 días registrados) &nbsp;|&nbsp;
+          <b>Generado:</b> 22/04/2026 16:30
+        </div>
+
+        <!-- PRODUCTO_A -->
+        <table class="email-table">
+          <tr class="camp-head"><td colspan="4">PRODUCTO_A</td></tr>
+          <tr>
+            <th class="lbl">INDICADOR</th>
+            <th>CANTIDAD (Nro. Op.)</th>
+            <th>MONTO (MM$)</th>
+            <th>TICKET PROM. (MM$)</th>
+          </tr>
+          <tr>
+            <td class="lbl">Real parcial (a la fecha)</td>
+            <td>1,203</td><td>4,187,420,000</td><td>3,481,230</td>
+          </tr>
+          <tr class="proy">
+            <td class="lbl">Proyección de cierre</td>
+            <td>1,850</td><td>6,520,000,000</td><td>3,524,864</td>
+          </tr>
+        </table>
+
+        <!-- PRODUCTO_B -->
+        <table class="email-table">
+          <tr class="camp-head"><td colspan="4">PRODUCTO_B</td></tr>
+          <tr>
+            <th class="lbl">INDICADOR</th>
+            <th>CANTIDAD (Nro. Op.)</th>
+            <th>MONTO (MM$)</th>
+            <th>TICKET PROM. (MM$)</th>
+          </tr>
+          <tr>
+            <td class="lbl">Real parcial (a la fecha)</td>
+            <td>312</td><td>897,410,000</td><td>2,876,314</td>
+          </tr>
+          <tr class="proy">
+            <td class="lbl">Proyección de cierre</td>
+            <td>521</td><td>1,501,200,000</td><td>2,881,382</td>
+          </tr>
+        </table>
+
+        <!-- TDC -->
+        <table class="email-table">
+          <tr class="camp-head"><td colspan="2">TDC_TITULAR</td></tr>
+          <tr><th class="lbl">INDICADOR</th><th>CANTIDAD (Nro. Op.)</th></tr>
+          <tr><td class="lbl">Real parcial (a la fecha)</td><td>756</td></tr>
+          <tr class="proy"><td class="lbl">Proyección de cierre</td><td>1,100</td></tr>
+        </table>
+
+        <!-- SEMANAL -->
+        <div class="email-section-title">Proyección de Cierre Semanal</div>
+        <div class="email-meta">
+          <b>Semana del:</b> 20/04/2026 &nbsp;|&nbsp; <b>Avance:</b> 60.0% (3 días registrados)
+        </div>
+        <table class="email-table">
+          <tr class="camp-head camp-head-week"><td colspan="4">PRODUCTO_A</td></tr>
+          <tr>
+            <th class="lbl">INDICADOR</th>
+            <th>CANTIDAD (Nro. Op.)</th>
+            <th>MONTO (MM$)</th>
+            <th>TICKET PROM. (MM$)</th>
+          </tr>
+          <tr>
+            <td class="lbl">Real parcial (semana)</td>
+            <td>192</td><td>634,180,000</td><td>3,303,021</td>
+          </tr>
+          <tr class="proy">
+            <td class="lbl">Proyección de cierre</td>
+            <td>368</td><td>1,278,400,000</td><td>3,473,913</td>
+          </tr>
+        </table>
+
+        <div class="email-footer">
+          Proyección generada automáticamente combinando: ritmo del mes actual, referencia al mes anterior
+          y modelo estacional Prophet (Meta). El intervalo 80% corresponde al rango de confianza del modelo Prophet.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETALLES TÉCNICOS -->
+  <div class="full-col card">
+    <h2>Detalles de implementación</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;flex-wrap:wrap;">
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Detección dinámica de columnas</p>
+        <p style="font-size:13px;color:var(--muted);">El código detecta automáticamente las columnas del Excel por prefijo, sin depender de posiciones fijas. Tolera cambios en nombres o espacios.</p>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Piso de seguridad</p>
+        <p style="font-size:13px;color:var(--muted);">La proyección nunca puede ser menor que el real parcial acumulado. Aplica tanto en la dimensión mensual como en la semanal.</p>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Credenciales seguras</p>
+        <p style="font-size:13px;color:var(--muted);">Las credenciales SMTP se leen de variables de entorno del sistema operativo. No se almacenan en el código fuente.</p>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Cero intervención manual</p>
+        <p style="font-size:13px;color:var(--muted);">El script detecta el mes y la semana en curso automáticamente. Se puede calendarizar con Task Scheduler o cron.</p>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Campañas configurables</p>
+        <p style="font-size:13px;color:var(--muted);">Las campañas y sus columnas asociadas se definen en un diccionario. Agregar un nuevo producto requiere solo una entrada más.</p>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Ticket promedio automático</p>
+        <p style="font-size:13px;color:var(--muted);">Para productos con monto, el ticket promedio proyectado se calcula a partir de las proyecciones individuales, con protección contra división por cero.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Carlos Lorca Toledo &nbsp;·&nbsp; <a href="proyectos.html">← Volver a Proyectos</a> &nbsp;·&nbsp; <a href="contacto.html">Contacto</a></p>
+</footer>
+
+</body>
+</html>
