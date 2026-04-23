@@ -13,7 +13,7 @@
 Sistema automático de forecasting que combina tres modelos estadísticos con ponderación adaptativa para estimar el cierre mensual y semanal de campañas comerciales. Los resultados se entregan en un correo HTML ejecutivo generado sin intervención manual.
 
 **Lo que hace:**
-- Lee una bitácora diaria en Excel y detecta automáticamente el mes y semana en curso
+- Lee un archivo diario en Excel y detecta automáticamente el mes y semana en curso
 - Combina tres métodos: ritmo del mes actual, referencia al mes anterior y modelo Prophet (Meta)
 - Ajusta los pesos de cada método según el avance del período
 - Genera y envía un reporte HTML por correo vía SMTP
